@@ -34,7 +34,6 @@ pub struct SignatureGenerator {
 impl SignatureGenerator {
     pub fn make_signature_from_file(file_path: &str) -> Result<DecodedSignature, Box<dyn Error>> {
         // Decode the .WAV, .MP3, .OGG or .FLAC file
-        println!("make_signature_from_file");
 
         let mut decoder = rodio::Decoder::new(BufReader::new(std::fs::File::open(file_path)?));
 
@@ -56,7 +55,6 @@ impl SignatureGenerator {
         let mut raw_pcm_samples: Vec<i16> = converted_file.collect();
 
         let slice_len = raw_pcm_samples.len().min(12 * 16000);
-        println!("slice_len: {}", slice_len);
         if raw_pcm_samples.len() > 12 * 16000 {
             let middle = raw_pcm_samples.len() / 2;
             raw_pcm_samples = raw_pcm_samples[middle - (6 * 16000)..middle + (6 * 16000)]
@@ -64,11 +62,8 @@ impl SignatureGenerator {
                 .cloned()
                 .collect();
         }
-        println!("slice_len: {}", slice_len);
         let v: Vec<i16> = raw_pcm_samples[..slice_len].iter().cloned().collect();
-        println!("v.len(): {}", v.len());
         let sig = SignatureGenerator::make_signature_from_buffer(v);
-        println!("sig: {:?}", sig);
         Ok(sig)
     }
 
@@ -89,7 +84,6 @@ impl SignatureGenerator {
     }
 
     pub fn make_signature_from_buffer(s16_mono_16khz_buffer: Vec<i16>) -> DecodedSignature {
-        println!("make_signature_from_buffer");
         let mut fft_outputs = Vec::<Vec<f32>>::new();
         let mut spread_fft_outputs = Vec::<Vec<f32>>::new();
         for _ in 0..256 {
