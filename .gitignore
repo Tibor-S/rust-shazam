@@ -8,6 +8,8 @@ build/
 *~
 *.swp
 .vscode
+.log
+test.*
 
 # The following is related to Rust
 target/
